@@ -16,6 +16,7 @@ const Details = ({ route, navigation }) => {
     useEffect(() => {
         getMovie(movieId).then(info => setMovieInfo(info));
         setLoaded(true);
+        console.log(process.env.REACT_APP_APIKEY);
     }, [])
 
     useEffect(() => {
