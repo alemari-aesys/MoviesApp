@@ -3,12 +3,10 @@ import { TouchableOpacity, StyleSheet, Image, Text } from 'react-native';
 
 const placeholderImage = require("../assets/images/placeholder.png")
 
-
-
 const Card = ({item, navigation}) => {
     return (
         <TouchableOpacity onPress={() => {navigation.navigate('Details', {movieId: item.id})}} style={styles.container}>
-            <Image 
+            <Image
             style={styles.image} 
             resizeMode={"cover"} //covers the container of the image with the exact dimensions that you specified
             source={item.poster_path ? {uri: `https://image.tmdb.org/t/p/w500${item.poster_path}`} : placeholderImage}>
@@ -23,7 +21,8 @@ const styles = StyleSheet.create({
         padding: 5,
         position: "relative",
         alignItems: 'center',
-        height: 200
+        height: 200,
+        marginBottom: 10
     },
     image: {
         height: 200,

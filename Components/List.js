@@ -2,8 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList} from "react-native"
 import Card from './Card';
 
-const List = (props) => {
-    const {navigation, title, content} = props
+const List = ({navigation, title, content}) => {
     return (
         <>
         <View style={styles.list}>

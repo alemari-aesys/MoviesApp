@@ -51,9 +51,6 @@ const Home = ({ navigation }) => {
             .finally(() => {
                 setLoaded(true);
             })
-
-        // console.log(dimensions);
-
     }, [])
 
     return (
@@ -98,6 +95,9 @@ const Home = ({ navigation }) => {
               title="Documentary Movies" 
               content={documentaryMovies} />
           </View>}
+          <View>
+              <Text></Text>
+          </View>
         </ScrollView> : <ActivityIndicator size='large' color='blue'/>}
         {error && <Error errorText1={"Oops, something went wrong"} errorText2={"Make sure you're online"} />}
         </>

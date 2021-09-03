@@ -1,31 +1,38 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Text, View, ScrollView, Image, StyleSheet, Dimensions, ActivityIndicator } from 'react-native';
+import { Text, View, ScrollView, Image, StyleSheet, Dimensions, ActivityIndicator, Modal } from 'react-native';
 import { getMovie } from "../services/services";
+import Video from "../Components/Video";
+import PlayButton from '../Components/PlayButton';
 import StarRating from "react-native-star-rating";
 
 const placeholderImage = require("../assets/images/placeholder.png")
 const height = Dimensions.get('screen').height;
 
-
-const Details = ({ route, navigation }) => {
+const Details = ({ route }) => {
     const movieId = route.params.movieId;
     const [movieInfo, setMovieInfo] = useState();
     const [loaded, setLoaded] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         getMovie(movieId).then(info => setMovieInfo(info));
         setLoaded(true);
-        console.log(process.env.REACT_APP_APIKEY);
     }, [])
 
     useEffect(() => {
         console.log(movieInfo);
     }, [movieInfo])
 
+
+    const videoShown = () => {
+        setModalVisible(!modalVisible);
+    }
+
     return (
         <>
         {loaded ?
+            <>
             <ScrollView>
                 <Image
                 style={styles.image}
@@ -33,6 +40,9 @@ const Details = ({ route, navigation }) => {
                 source={movieInfo ? {uri: `https://image.tmdb.org/t/p/w500${movieInfo.poster_path}`} : placeholderImage}
                 />
                 <View style={styles.container}>
+                    <View style={styles.playButton}>
+                        <PlayButton handlePress={videoShown} />
+                    </View>
                 {movieInfo && <Text style={styles.movieTitle}>{movieInfo.title}</Text>}
                 {movieInfo && <Text style={styles.overview}>{movieInfo.overview}</Text>}
                 {movieInfo && <Text style={styles.release}>RELEASE DATE: {movieInfo.release_date}</Text>}
@@ -47,6 +57,12 @@ const Details = ({ route, navigation }) => {
                 {movieInfo && <StarRating fullStarColor={'gold'} disabled={true} maxStars={5} rating={movieInfo.vote_average/2} />}
                 </View>
             </ScrollView>
+                <Modal supportedOrientations={['portrait','landscape']} animationType='fade' visible={modalVisible}>
+                    <View style={styles.videoModal}>
+                        <Video videoFunction={videoShown} />
+                    </View>
+                </Modal>
+            </>
          : <ActivityIndicator size="large" color='blue' />
         }
         </>
@@ -81,6 +97,16 @@ const styles = StyleSheet.create({
     },
     release: {
         fontWeight: 'bold'
+    },
+    playButton: {
+        position: 'absolute',
+        top: -20,
+        right: 20
+    },
+    videoModal: {
+        flex: 1, 
+        justifyContent: "center", 
+        alignItems: "center"
     }
 })
 
